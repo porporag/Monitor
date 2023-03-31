@@ -6,7 +6,6 @@ import os
 import wave
 import threading
 import tkinter as tk
-from tkinter import ttk
 import pyaudio
 import ffmpeg
 
@@ -14,12 +13,11 @@ class Recorder:
     def __init__(self):
         self.font = ("Arial",30,"bold")
         self.index_name = 0
-        self.fps = 30
         self.root = tk.Tk()
         # self.root.geometry("300x150")
         self.root.resizable(False,False)
         self.root.title('Monitor')
-        self.button = ttk.Button(text = "🎙",font = self.font,
+        self.button = tk.Button(text = "🎙",font = self.font,
                                 command = self.click_handler_audio)
         self.button.grid(column=0,row=0)
         self.button_video = tk.Button(text = "⏺", font = self.font,
@@ -119,7 +117,7 @@ class Recorder:
             audio = ffmpeg.input(f"audio_recording{self.index_name}.wav")
             video_real_fps = ffmpeg.input(f"video_recording{self.index_name}.avi")
 
-            out,err = ffmpeg.output(video_real_fps, audio, f"video_audio_{self.index_name}.avi").run()
+            out,err = ffmpeg.concat(video_real_fps, audio, v=1, a=1).output(f"video_audio_{self.index_name}.mp4").run()
 
         else:
             None
